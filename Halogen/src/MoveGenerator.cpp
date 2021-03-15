@@ -167,8 +167,8 @@ static uint64_t GetLeastValuableAttacker(Position& position, uint64_t attackers,
 
 static int see(Position& position, Move move)
 {
-	Square from = GetFrom(move);
-	Square to   = GetTo(move);
+	Square from = move.GetFrom();
+	Square to   = move.GetTo();
 
 	int scores[32]{ 0 };
 	int index = 0;
@@ -258,7 +258,7 @@ void MoveGenerator::OrderMoves(std::vector<ExtendedMove>& moves)
 
 			if (GetFlag(moves[i].move) != EN_PASSANT)
 			{
-				SEE = seeCapture(position, moves[i].move);
+				SEE = see(position, moves[i].move);
 			}
 
 			moves[i].score = SCORE_CAPTURE + SEE;
