@@ -7,6 +7,7 @@ TTEntry::TTEntry()
 	depth = -1;
 	cutoff = EntryType::EMPTY_ENTRY;
 	halfmove = -1;
+	bestMove = Move::invalid;
 }
 
 TTEntry::TTEntry(Move best, uint64_t ZobristKey, int Score, int Depth, int currentTurnCount, int distanceFromRoot, EntryType Cutoff)
