@@ -165,7 +165,7 @@ static uint64_t GetLeastValuableAttacker(Position& position, uint64_t attackers,
 	return 0;
 }
 
-int see(Position& position, Move move)
+static int see(Position& position, Move move)
 {
 	Square from = GetFrom(move);
 	Square to   = GetTo(move);
@@ -299,37 +299,4 @@ Move GetHashMove(const Position& position, int distanceFromRoot)
 	}
 
 	return {};
-}
-
-int see(Position& position, Square square, Players side)
-{
-	int value = 0;
-	Move capture = GetSmallestAttackerMove(position, square, side);
-
-	if (capture)
-	{
-		int captureValue = PieceValues[position.GetSquare(GetTo(capture))];
-
-		position.ApplyMoveQuick(capture);
-		value = std::max(0, captureValue - see(position, square, !side));	// Do not consider captures if they lose material, therefor max zero 
-		position.RevertMoveQuick();
-	}
-
-	return value;
-}
-
-int seeCapture(Position& position, const Move& move)
-{
-	assert(GetFlag(move) == CAPTURE);	//Don't seeCapture with promotions or en_passant!
-
-	Players side = position.GetTurn();
-
-	int value = 0;
-	int captureValue = PieceValues[position.GetSquare(GetTo(move))];
-
-	position.ApplyMoveQuick(move);
-	value = captureValue - see(position, GetTo(move), !side);
-	position.RevertMoveQuick();
-
-	return value;
 }
