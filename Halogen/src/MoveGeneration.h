@@ -8,6 +8,7 @@
 // the ExtendedMove vector from the start.
 struct ExtendedMove
 {
+	ExtendedMove() = default;
 	ExtendedMove(const Move _move, const int _score = 0, const short int _SEE = 0) : move(_move), score(_score), SEE(_SEE) {}
 	ExtendedMove(Square from, Square to, MoveFlag flag) 
 		: move(CreateMove(from, to, flag)), score(0), SEE(0) {}
@@ -16,8 +17,8 @@ struct ExtendedMove
 	bool operator>(const ExtendedMove& rhs) const { return score > rhs.score; };
 
 	Move move = Move::invalid;
-	int16_t score;
-	int16_t SEE;
+	int16_t score = 0;
+	int16_t SEE = 0;
 };
 
 void LegalMoves(Position& position, std::vector<ExtendedMove>& moves);
