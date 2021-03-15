@@ -8,7 +8,7 @@ void PrintMove(Move move, std::ostream& ss)
 
 	ss << (char)(GetFile(prev) + 'a') << GetRank(prev) + 1 << (char)(GetFile(current) + 'a') << GetRank(current) + 1;	//+1 to make it from 1-8 and not 0-7
 
-	if (isPromotion(move))
+	if (IsPromotion(move))
 	{
 		if (GetFlag(move) == KNIGHT_PROMOTION || GetFlag(move) == KNIGHT_PROMOTION_CAPTURE)
 			ss << "n";
