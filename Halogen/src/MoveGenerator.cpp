@@ -167,8 +167,8 @@ static uint64_t GetLeastValuableAttacker(Position& position, uint64_t attackers,
 
 static int see(Position& position, Move move)
 {
-	Square from = move.GetFrom();
-	Square to   = move.GetTo();
+	Square from = GetFrom(move);
+	Square to = GetTo(move);
 
 	int scores[32]{ 0 };
 	int index = 0;
