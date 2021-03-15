@@ -37,6 +37,11 @@ constexpr Square GetFrom(Move move)
 	return static_cast<Square>(move & 0b111111);
 }
 
+bool operator<(Move, Move) = delete;
+bool operator>(Move, Move) = delete;
+bool operator<=(Move, Move) = delete;
+bool operator>=(Move, Move) = delete;
+
 constexpr Square GetTo(Move move)
 {
 	return static_cast<Square>((move >> 6) & 0b111111);

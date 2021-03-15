@@ -341,7 +341,7 @@ uint64_t Position::IncrementZobristKey(Move move)
 	if (PrevGetEnPassant() <= SQ_H8)
 		key ^= ZobristTable[(12 * 64 + 5 + GetFile(PrevGetEnPassant()))];		//undo the previous ep square
 
-	if (!move) return key;	//null move
+	if (move == Move::invalid) return key;	//null move
 
 	if (!IsPromotion(move))
 	{
@@ -420,7 +420,8 @@ std::array<int16_t, INPUT_NEURONS> Position::GetInputLayer() const
 deltaArray& Position::CalculateMoveDelta(Move move)
 {
 	delta.size = 0;
-	if (!move) return delta;		//null move
+	if (move == Move::invalid) 
+		return delta;		//null move
 
 	if (!IsPromotion(move))
 	{
