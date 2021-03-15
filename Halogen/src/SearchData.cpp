@@ -16,6 +16,7 @@ ThreadSharedData::ThreadSharedData(const SearchLimits& limits, const SearchParam
 	noOutput = NoOutput;
 	ThreadWantsToStop.resize(param.threads, false);
 	threadlocalData.resize(param.threads, SearchData(limits));
+	currentBestMove = Move::invalid;
 }
 
 Move ThreadSharedData::GetBestMove() const

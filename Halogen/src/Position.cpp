@@ -75,7 +75,7 @@ void Position::ApplyMove(Move move)
 		break;
 	}
 
-	if (IsCapture(move) || GetSquare(GetTo(move)) == Piece(PAWN, GetTurn()) || isPromotion(move))
+	if (IsCapture(move) || GetSquare(GetTo(move)) == Piece(PAWN, GetTurn()) || IsPromotion(move))
 		Reset50Move();
 
 	ClearSquare(GetFrom(move));
@@ -343,7 +343,7 @@ uint64_t Position::IncrementZobristKey(Move move)
 
 	if (!move) return key;	//null move
 
-	if (!isPromotion(move))
+	if (!IsPromotion(move))
 	{
 		key ^= ZobristTable[GetSquare(GetTo(move)) * 64 + GetFrom(move)];	//toggle the square we left
 		key ^= ZobristTable[GetSquare(GetTo(move)) * 64 + GetTo(move)];	//toggle the arriving square
@@ -383,7 +383,7 @@ uint64_t Position::IncrementZobristKey(Move move)
 	}
 
 	//Promotions
-	if (isPromotion(move))
+	if (IsPromotion(move))
 	{
 		key ^= ZobristTable[Piece(PAWN, !GetTurn()) * 64 + GetFrom(move)];
 
@@ -422,7 +422,7 @@ deltaArray& Position::CalculateMoveDelta(Move move)
 	delta.size = 0;
 	if (!move) return delta;		//null move
 
-	if (!isPromotion(move))
+	if (!IsPromotion(move))
 	{
 		delta.deltas[delta.size].index = GetSquare(GetTo(move)) * 64 + GetFrom(move);			//toggle the square we left
 		delta.deltas[delta.size++].delta = -1;
@@ -463,7 +463,7 @@ deltaArray& Position::CalculateMoveDelta(Move move)
 	}
 
 	//Promotions
-	if (isPromotion(move))
+	if (IsPromotion(move))
 	{
 		delta.deltas[delta.size].index = Piece(PAWN, !GetTurn()) * 64 + GetFrom(move);
 		delta.deltas[delta.size++].delta = -1;

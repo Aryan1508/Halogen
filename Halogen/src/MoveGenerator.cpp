@@ -238,7 +238,7 @@ void MoveGenerator::OrderMoves(std::vector<ExtendedMove>& moves)
 		}
 
 		//Promotions
-		else if (isPromotion(moves[i].move))
+		else if (IsPromotion(moves[i].move))
 		{
 			if (GetFlag(moves[i].move) == QUEEN_PROMOTION || GetFlag(moves[i].move) == QUEEN_PROMOTION_CAPTURE)
 			{
@@ -285,7 +285,7 @@ Move GetHashMove(const Position& position, int depthRemaining, int distanceFromR
 		return hash.GetMove();
 	}
 
-	return {};
+	return Move::invalid;
 }
 
 Move GetHashMove(const Position& position, int distanceFromRoot)
@@ -298,5 +298,5 @@ Move GetHashMove(const Position& position, int distanceFromRoot)
 		return hash.GetMove();
 	}
 
-	return {};
+	return Move::invalid;
 }

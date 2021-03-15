@@ -47,7 +47,7 @@ constexpr MoveFlag GetFlag(Move move)
 	return static_cast<MoveFlag>((move >> 12) & 0b1111);
 }
 
-constexpr bool isPromotion(Move move)
+constexpr bool IsPromotion(Move move)
 {
 	return move & (1ull << 15);
 }

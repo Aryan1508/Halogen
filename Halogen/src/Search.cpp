@@ -530,7 +530,7 @@ bool IsFutile(Move move, int beta, int alpha, Position & position, bool IsInChec
 {
 	return !IsPV(beta, alpha)
 		&& !IsCapture(move) 
-		&& !isPromotion(move) 
+		&& !IsPromotion(move) 
 		&& !IsInCheck
 		&& !FutilityMoveGivesCheck(position, move);
 }
@@ -643,7 +643,7 @@ SearchResult Quiescence(Position& position, unsigned int initialDepth, int alpha
 		if (SEE < 0)														//prune bad captures
 			break;
 
-		if (isPromotion(move) && !(GetFlag(move) == QUEEN_PROMOTION || GetFlag(move) == QUEEN_PROMOTION_CAPTURE))	//prune underpromotions
+		if (IsPromotion(move) && !(GetFlag(move) == QUEEN_PROMOTION || GetFlag(move) == QUEEN_PROMOTION_CAPTURE))	//prune underpromotions
 			break;
 
 		position.ApplyMove(move);
@@ -662,7 +662,7 @@ SearchResult Quiescence(Position& position, unsigned int initialDepth, int alpha
 
 void AddKiller(Move move, int distanceFromRoot, std::vector<std::array<Move, 2>>& KillerMoves)
 {
-	if (IsCapture(move) || isPromotion(move) || KillerMoves[distanceFromRoot][0] == move) return;
+	if (IsCapture(move) || IsPromotion(move) || KillerMoves[distanceFromRoot][0] == move) return;
 
 	KillerMoves[distanceFromRoot][1] = KillerMoves[distanceFromRoot][0];
 	KillerMoves[distanceFromRoot][0] = move;
@@ -670,7 +670,6 @@ void AddKiller(Move move, int distanceFromRoot, std::vector<std::array<Move, 2>>
 
 void AddHistory(const MoveGenerator& gen, const Move& move, SearchData& locals, int depthRemaining)
 {
-	if (depthRemaining > 20 || IsCapture(move) || isPromotion(move)) return;
+	if (depthRemaining > 20 || IsCapture(move) || IsPromotion(move)) return;
 	gen.AdjustHistory(move, locals, depthRemaining);
 }
-

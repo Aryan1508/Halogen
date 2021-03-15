@@ -593,7 +593,7 @@ Move GetSmallestAttackerMove(const Position& position, Square square, Players co
 		return CreateMove(static_cast<Square>(LSBpop(kingmask)), square, CAPTURE);
 	}
 
-	return {};
+	return Move::invalid;
 }
 
 bool MoveIsLegal(Position& position, const Move& move)
