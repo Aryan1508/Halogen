@@ -6,6 +6,9 @@ SearchData::SearchData(const SearchLimits& Limits) : limits(Limits)
 {
 	PvTable.resize(MAX_DEPTH);
 	KillerMoves.resize(MAX_DEPTH);
+	
+	for (auto& ply : KillerMoves)
+		std::fill(ply.begin(), ply.end(), Move::invalid);
 }
 
 ThreadSharedData::ThreadSharedData(const SearchLimits& limits, const SearchParameters& parameters, bool NoOutput) : param(parameters)
