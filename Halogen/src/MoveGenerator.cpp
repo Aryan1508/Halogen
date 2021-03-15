@@ -7,6 +7,8 @@ MoveGenerator::MoveGenerator(Position& Position, int DistanceFromRoot, const Sea
 		stage = Stage::GEN_LOUD;
 	else
 		stage = Stage::TT_MOVE;
+
+	Killer1 = Killer2 = TTmove = Move::invalid;
 }
 
 bool MoveGenerator::Next(Move& move)

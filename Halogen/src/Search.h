@@ -30,14 +30,15 @@ extern int SNMP_coeff;
 
 struct SearchResult
 {
+	SearchResult() = default;
 	SearchResult(short score, Move move = Move::invalid) : m_score(score), m_move(move) {}
 
 	int GetScore() const { return m_score; }
 	Move GetMove() const { return m_move; }
 
 private:
-	short m_score;
-	Move m_move;
+	short m_score = 0;
+	Move m_move = Move::invalid;
 };
 
 uint64_t SearchThread(Position position, SearchParameters parameters, const SearchLimits& limits, bool noOutput = false);
