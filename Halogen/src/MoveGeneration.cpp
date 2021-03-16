@@ -460,44 +460,24 @@ void GenerateMoves(Position& position, std::vector<ExtendedMove>& moves, Square 
 	AppendLegalMoves(square, targets, position, capture ? CAPTURE : QUIET, moves, pinned);
 }
 
-bool IsSquareThreatened(const Position& position, Square square, Players colour)
+bool IsSquareThreatened(const Position& position, Square sq, Players colour)
 {
-	if ((KnightAttacks[square] & position.GetPieceBB(KNIGHT, !colour)) != 0)
-		return true;
+	uint64_t occ     = position.GetAllPieces();
+	uint64_t pawns   = position.GetPieceBB(PAWN, colour);
+	uint64_t knights = position.GetPieceBB(KNIGHT, colour);
+	uint64_t bishops = position.GetPieceBB(BISHOP, colour);
+	uint64_t rooks   = position.GetPieceBB(ROOK, colour);
+	uint64_t queens  = position.GetPieceBB(QUEEN, colour);
+	uint64_t kings   = position.GetPieceBB(KING, colour);
 
-	if ((PawnAttacks[colour][square] & position.GetPieceBB(Piece(PAWN, !colour))) != 0)
-		return true;
+	bishops |= queens;
+	rooks   |= queens;
 
-	if ((KingAttacks[square] & position.GetPieceBB(KING, !colour)) != 0)					//if I can attack the enemy king he can attack me
-		return true;
-
-	uint64_t Pieces = position.GetAllPieces();
-	
-	uint64_t queen = position.GetPieceBB(QUEEN, !colour) & QueenAttacks[square];
-	while (queen != 0)
-	{
-		unsigned int start = LSBpop(queen);
-		if (mayMove(start, square, Pieces))
-			return true;
-	}
-
-	uint64_t bishops = position.GetPieceBB(BISHOP, !colour) & BishopAttacks[square];
-	while (bishops != 0)
-	{
-		unsigned int start = LSBpop(bishops);
-		if (mayMove(start, square, Pieces))
-			return true;
-	}
-
-	uint64_t rook = position.GetPieceBB(ROOK, !colour) & RookAttacks[square];
-	while (rook != 0)
-	{
-		unsigned int start = LSBpop(rook);
-		if (mayMove(start, square, Pieces))
-			return true;
-	}
-
-	return false;
+	return (PawnAttacks[!colour][sq] & pawns)
+		|| (AttackBB<BISHOP>(sq, occ) & bishops)
+		|| (AttackBB<ROOK>(sq, occ)   & rooks)
+		|| (AttackBB<KNIGHT>(sq)      & knights)
+		|| (AttackBB<KING>(sq) & kings);
 }
 
 bool IsInCheck(const Position& position, Players colour)
