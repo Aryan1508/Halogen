@@ -463,17 +463,17 @@ void GenerateMoves(Position& position, std::vector<ExtendedMove>& moves, Square 
 bool IsSquareThreatened(const Position& position, Square sq, Players colour)
 {
 	uint64_t occ     = position.GetAllPieces();
-	uint64_t pawns   = position.GetPieceBB(PAWN, colour);
-	uint64_t knights = position.GetPieceBB(KNIGHT, colour);
-	uint64_t bishops = position.GetPieceBB(BISHOP, colour);
-	uint64_t rooks   = position.GetPieceBB(ROOK, colour);
-	uint64_t queens  = position.GetPieceBB(QUEEN, colour);
-	uint64_t kings   = position.GetPieceBB(KING, colour);
+	uint64_t pawns   = position.GetPieceBB(PAWN, !colour);
+	uint64_t knights = position.GetPieceBB(KNIGHT, !colour);
+	uint64_t bishops = position.GetPieceBB(BISHOP, !colour);
+	uint64_t rooks   = position.GetPieceBB(ROOK, !colour);
+	uint64_t queens  = position.GetPieceBB(QUEEN, !colour);
+	uint64_t kings   = position.GetPieceBB(KING, !colour);
 
 	bishops |= queens;
 	rooks   |= queens;
 
-	return (PawnAttacks[!colour][sq] & pawns)
+	return (PawnAttacks[colour][sq] & pawns)
 		|| (AttackBB<BISHOP>(sq, occ) & bishops)
 		|| (AttackBB<ROOK>(sq, occ)   & rooks)
 		|| (AttackBB<KNIGHT>(sq)      & knights)
