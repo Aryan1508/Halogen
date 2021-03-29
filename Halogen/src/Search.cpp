@@ -609,6 +609,20 @@ int TBWinIn(int distanceFromRoot)
 	return TB_WIN_SCORE - distanceFromRoot;
 }
 
+int GetDeltaMargin(Position const& position)
+{
+	uint64_t queens = position.GetPieceBB(QUEEN, !position.GetTurn());
+	uint64_t rooks  = position.GetPieceBB(ROOK, !position.GetTurn());
+	uint64_t bishops = position.GetPieceBB(BISHOP, !position.GetTurn());
+	uint64_t knights  = position.GetPieceBB(KNIGHT, !position.GetTurn());
+
+	knights |= bishops;
+
+	return queens ? 900
+		: rooks ? 500
+		: knights ? 300 : 200;
+}
+
 SearchResult Quiescence(Position& position, unsigned int initialDepth, int alpha, int beta, int colour, unsigned int distanceFromRoot, int depthRemaining, SearchData& locals, ThreadSharedData& sharedData)
 {
 	position.ReportDepth(distanceFromRoot);
@@ -623,8 +637,13 @@ SearchResult Quiescence(Position& position, unsigned int initialDepth, int alpha
 
 	int staticScore = colour * EvaluatePositionNet(position, locals.evalTable);
 	if (staticScore >= beta) return staticScore;
+
+	if (staticScore + GetDeltaMargin(position) < alpha)
+		return alpha;
+
 	if (staticScore > alpha) alpha = staticScore;
-	
+
+
 	Move bestmove;
 	int Score = staticScore;
 
@@ -637,7 +656,7 @@ SearchResult Quiescence(Position& position, unsigned int initialDepth, int alpha
 
 		int SEE = gen.GetSEE();
 
-		if (staticScore + SEE + Delta_margin < alpha) 						//delta pruning
+		if (staticScore + SEE + GetDeltaMargin(position) < alpha) 						//delta pruning
 			break;
 
 		if (SEE < 0)														//prune bad captures
