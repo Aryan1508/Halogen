@@ -656,7 +656,7 @@ SearchResult Quiescence(Position& position, unsigned int initialDepth, int alpha
 
 		int SEE = gen.GetSEE();
 
-		if (staticScore + SEE + GetDeltaMargin(position) < alpha) 						//delta pruning
+		if (staticScore + SEE + Delta_margin < alpha) 						//delta pruning
 			break;
 
 		if (SEE < 0)														//prune bad captures
