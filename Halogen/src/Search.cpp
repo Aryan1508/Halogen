@@ -638,7 +638,7 @@ SearchResult Quiescence(Position& position, unsigned int initialDepth, int alpha
 	int staticScore = colour * EvaluatePositionNet(position, locals.evalTable);
 	if (staticScore >= beta) return staticScore;
 
-	if (staticScore + GetDeltaMargin(position) < alpha)
+	if (staticScore + Delta_margin < alpha)
 		return alpha;
 
 	if (staticScore > alpha) alpha = staticScore;
