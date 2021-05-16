@@ -79,13 +79,16 @@ uint64_t SearchThread(Position position, SearchParameters parameters, const Sear
 
 void InitSearch()
 {
+    static constexpr double LMR_depth_constant = 2.6715305375225764;
+    static constexpr double LMR_movenum_constant = 4.0;
+
 	KeepSearching = true;
 
 	for (int i = 0; i < 64; i++)
 	{
 		for (int j = 0; j < 64; j++)
 		{
-			LMR_reduction[i][j] = std::round(LMR_constant + LMR_coeff * log(i + 1) * log(j + 1));
+			LMR_reduction[i][j] = std::round(LMR_constant + LMR_coeff * log(i + LMR_depth_constant) * log(j + LMR_movenum_constant));
 		}
 	}
 }
