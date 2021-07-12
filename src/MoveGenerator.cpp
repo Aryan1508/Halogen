@@ -142,8 +142,6 @@ void selection_sort(ExtendedMoveList& v)
 	}
 }
 
-constexpr int PieceValues[] = { 100, 300, 325, 500, 900, 1000,
-							    100, 300, 325, 500, 900, 1000 };
 
 uint64_t AttackersToSq(Position& position, Square sq)
 {
@@ -193,13 +191,13 @@ int see(Position& position, Move move)
 	rooks |= position.GetPieceBB<ROOK>();
 
 	uint64_t attack_def = AttackersToSq(position, to);
-	scores[index] = PieceValues[captured];
+	scores[index] = SEEPieceValues[captured];
 
 	do
 	{
 		index++;
 		attacker = !attacker;
-		scores[index] = PieceValues[capturing] - scores[index - 1];
+		scores[index] = SEEPieceValues[capturing] - scores[index - 1];
 
 		if (-scores[index - 1] < 0 && scores[index] < 0)
 			break;
@@ -251,7 +249,7 @@ void MoveGenerator::OrderMoves(ExtendedMoveList& moves)
 			if (moves[i].move.GetFlag() == QUEEN_PROMOTION || moves[i].move.GetFlag() == QUEEN_PROMOTION_CAPTURE)
 			{
 				moves[i].score = SCORE_QUEEN_PROMOTION;
-				moves[i].SEE = PieceValues[QUEEN];
+				moves[i].SEE = SEEPieceValues[QUEEN];
 			}
 			else
 			{

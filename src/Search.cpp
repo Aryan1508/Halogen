@@ -344,7 +344,7 @@ SearchResult NegaScout(Position& position, unsigned int initialDepth, int depthR
 		if (depthRemaining < LMP_depth && searchedMoves >= LMP_constant + LMP_coeff * depthRemaining && Score > TBLossIn(MAX_DEPTH))
 			gen.SkipQuiets();
 
-        if (depthRemaining <= 5 && gen.GetStage() == Stage::GIVE_BAD_LOUD && extmove.SEE < (depthRemaining * -100))
+        if (depthRemaining <= 5 && gen.GetStage() == Stage::GIVE_BAD_LOUD && extmove.SEE < SEEPieceValues[depthRemaining])
             continue;
 
 		//futility pruning

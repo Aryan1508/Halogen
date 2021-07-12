@@ -50,3 +50,6 @@ private:
 
 Move GetHashMove(const Position& position, int depthRemaining, int distanceFromRoot);
 Move GetHashMove(const Position& position, int distanceFromRoot);
+
+constexpr int SEEPieceValues[] = { 100, 300, 325, 500, 900, 1000,
+							    100, 300, 325, 500, 900, 1000 };
