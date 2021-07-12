@@ -348,9 +348,6 @@ SearchResult NegaScout(Position& position, unsigned int initialDepth, int depthR
 		if (depthRemaining < LMP_depth && searchedMoves >= LMP_constant + LMP_coeff * depthRemaining && Score > TBLossIn(MAX_DEPTH))
 			gen.SkipQuiets();
 
-        if (GoodCapturesExist && depthRemaining < 5 && gen.GetStage() == Stage::GIVE_BAD_LOUD && extmove.SEE < SEEPieceValues[depthRemaining])
-            continue;
-
 		//futility pruning
 		if (   searchedMoves > 0
 			&& FutileNode
@@ -362,6 +359,11 @@ SearchResult NegaScout(Position& position, unsigned int initialDepth, int depthR
 			if (gen.GetStage() >= Stage::GIVE_BAD_LOUD)
 				break;
 		}
+
+        if (GoodCapturesExist && depthRemaining < 8 && gen.GetStage() == Stage::GIVE_BAD_LOUD)
+        {
+            if (extmove.SEE < depthRemaining * -200) continue;
+        }
 
 		position.ApplyMove(move);
 		tTable.PreFetch(position.GetZobristKey());							//load the transposition into l1 cache. ~5% speedup

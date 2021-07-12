@@ -254,6 +254,7 @@ void MoveGenerator::OrderMoves(ExtendedMoveList& moves)
 			else
 			{
 				moves[i].score = SCORE_UNDER_PROMOTION;
+                moves[i].SEE   = 0;
 			}
 		}
 
