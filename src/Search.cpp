@@ -328,6 +328,7 @@ SearchResult NegaScout(Position& position, unsigned int initialDepth, int depthR
 		depthRemaining--;
 
 	bool FutileNode = depthRemaining < Futility_depth && staticScore + Futility_constant + Futility_coeff * depthRemaining < a;
+    bool GoodCapturesExist = false;
 
 	MoveGenerator gen(position, distanceFromRoot, locals, false);
 	ExtendedMove extmove;
@@ -338,13 +339,16 @@ SearchResult NegaScout(Position& position, unsigned int initialDepth, int depthR
 		if (distanceFromRoot == 0 && sharedData.MultiPVExcludeMove(move))
 			continue;
 
+        if (gen.GetStage() == Stage::GIVE_GOOD_LOUD)
+            GoodCapturesExist = true;
+
 		noLegalMoves = false;
 
 		// late move pruning
 		if (depthRemaining < LMP_depth && searchedMoves >= LMP_constant + LMP_coeff * depthRemaining && Score > TBLossIn(MAX_DEPTH))
 			gen.SkipQuiets();
 
-        if (depthRemaining <= 5 && gen.GetStage() == Stage::GIVE_BAD_LOUD && extmove.SEE < SEEPieceValues[depthRemaining])
+        if (GoodCapturesExist && depthRemaining < 5 && gen.GetStage() == Stage::GIVE_BAD_LOUD && extmove.SEE < SEEPieceValues[depthRemaining])
             continue;
 
 		//futility pruning
