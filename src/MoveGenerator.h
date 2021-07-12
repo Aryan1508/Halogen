@@ -18,7 +18,7 @@ class MoveGenerator
 public:
 	MoveGenerator(Position& Position, int DistanceFromRoot, const SearchData& Locals, bool Quiescence);
 
-	bool Next(Move& move);	//returns false if no more legal moves
+	bool Next(ExtendedMove& move);	//returns false if no more legal moves
 	int GetSEE() const { return (current - 1)->SEE; }
 
 	void AdjustHistory(const Move& move, SearchData& Locals, int depthRemaining) const;

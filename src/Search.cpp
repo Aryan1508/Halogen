@@ -330,10 +330,11 @@ SearchResult NegaScout(Position& position, unsigned int initialDepth, int depthR
 	bool FutileNode = depthRemaining < Futility_depth && staticScore + Futility_constant + Futility_coeff * depthRemaining < a;
 
 	MoveGenerator gen(position, distanceFromRoot, locals, false);
-	Move move;
+	ExtendedMove extmove;
 
-	for (searchedMoves = 0; gen.Next(move); searchedMoves++)
+	for (searchedMoves = 0; gen.Next(extmove); searchedMoves++)
 	{
+        Move move = extmove.move;
 		if (distanceFromRoot == 0 && sharedData.MultiPVExcludeMove(move))
 			continue;
 
@@ -342,6 +343,9 @@ SearchResult NegaScout(Position& position, unsigned int initialDepth, int depthR
 		// late move pruning
 		if (depthRemaining < LMP_depth && searchedMoves >= LMP_constant + LMP_coeff * depthRemaining && Score > TBLossIn(MAX_DEPTH))
 			gen.SkipQuiets();
+
+        if (depthRemaining <= 5 && gen.GetStage() == Stage::GIVE_BAD_LOUD && extmove.SEE < (depthRemaining * -100))
+            continue;
 
 		//futility pruning
 		if (   searchedMoves > 0
@@ -645,10 +649,11 @@ SearchResult Quiescence(Position& position, unsigned int initialDepth, int alpha
 	int Score = staticScore;
 
 	MoveGenerator gen(position, distanceFromRoot, locals, true);
-	Move move;
+	ExtendedMove extmove;
 
-	while (gen.Next(move))
+	while (gen.Next(extmove))
 	{
+        Move move = extmove.move;
 		int SEE = gen.GetSEE();
 
 		if (staticScore + SEE + Delta_margin < alpha) 						//delta pruning

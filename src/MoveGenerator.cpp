@@ -9,7 +9,7 @@ MoveGenerator::MoveGenerator(Position& Position, int DistanceFromRoot, const Sea
 		stage = Stage::TT_MOVE;
 }
 
-bool MoveGenerator::Next(Move& move)
+bool MoveGenerator::Next(ExtendedMove& move)
 {
 	if (stage == Stage::TT_MOVE)
 	{
@@ -142,8 +142,8 @@ void selection_sort(ExtendedMoveList& v)
 	}
 }
 
-constexpr int PieceValues[] = { 91, 532, 568, 715, 1279, 5000,
-								91, 532, 568, 715, 1279, 5000 };
+constexpr int PieceValues[] = { 100, 300, 325, 500, 900, 1000,
+							    100, 300, 325, 500, 900, 1000 };
 
 uint64_t AttackersToSq(Position& position, Square sq)
 {
